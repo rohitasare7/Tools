@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comma Inserter for In Clause | SQL Query</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css" integrity="sha512-EZLkOqwILORob+p0BXZc+Vm3RgJBOe1Iq/0fiI7r/wJgzOFZMlsqTa29UEl6v6U6gsV4uIpsNZoV32YZqrCRCQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css" integrity="sha512-5fsy+3xG8N/1PV5MIJz9ZsWpkltijBI48gBzQ/Z2eVATePGHOkMIn+xTDHIfTZFVb9GMpflF2wOWItqxAP2oLQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!--<link rel="stylesheet" href="style.css">-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.8/clipboard.min.js"></script>
+    <style>
+        #resetBtn {margin: 0 30px;}
+    </style>
+</head>
+<body>
+    <div class='container'>
+        <!-- Title Div -->
+        <div class='title'>
+            <center><h1>SOQL IN Clause Comma Inserter</h1></center>
+        </div>
+        <div class='center'>
+        <h5>Enter Value Line by Line</h5>
+        
+        <div class="row">
+           
+            <div class="two-thirds column">
+          
+            <label for="exampleRecipientInput">Add Prefix</label>
+            <input class="u-full-width" type="text" placeholder="Add Prefix Here" id="prefixInput">
+        </div>
+    </div>
+        <textarea class="u-full-width" placeholder="Enter your data here (Line by Line)" id="uniqueId" name="w3review" style="height: 150px; width: 100%;"></textarea><br/>
+        <input onclick="getData()" id="submit" type="submit" value="Submit"></input>
+        <!-- <button onclick="getData()" id="submit" >Submit</button><br/><br/> -->
+        <br/>
+        <!-- Output Text -->
+        <textarea id="output" placeholder="Click Copy " class="u-full-width" rows="10" cols="50"></textarea>
+        <button id="btnCopy" data-clipboard-target="#output">Copy</button>
+        <button id="resetBtn" onclick="resetFieldValue();">Reset</button>
+        </div>
+    </div>
+    <script>
+
+        function getData() {
+            let uniqueList = [];
+            var uniqueIDs = document.getElementById('uniqueId').value;
+            var prefixValue = document.getElementById('prefixInput').value;
+            uniqueIDs = uniqueIDs.split('\n');
+            for(var id of uniqueIDs){
+                if(id.length>0){
+                    if(prefixValue !=null){
+                        uniqueList.push(`'${prefixValue+id}'`);
+                    }
+                    else {
+                        uniqueList.push(`'${id}'`);
+                    }
+                }
+            }
+            console.log(uniqueIDs);
+            document.getElementById('output').value = uniqueList;
+        }
+        
+    </script>
+    
+    <script>
+        //ClipboardJS Intialization - Added by Rohit
+        let copyFunction = new ClipboardJS('#btnCopy');
+        //Reset Button
+        function resetFieldValue() {
+        document.getElementById("uniqueId").value = "";
+        document.getElementById("output").value = "";
+        document.getElementById("prefixInput").value = "";
+        }
+        
+    </script>
+
+</body>
+</html>
