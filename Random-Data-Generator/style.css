@@ -1,0 +1,208 @@
+/* Template Name : RDG v1
+Author : Rohit A
+Date : 11/07/2021
+*/
+
+/* Specifiy Font Family Starts */
+body {
+    font-family: "DM Sans", sans-serif !important;
+    background: #fafafa;
+    margin: 0;
+}
+html {
+    scroll-behavior: smooth;
+}
+input[type="email"],
+input[type="number"],
+input[type="password"],
+input[type="search"],
+input[type="tel"],
+input[type="text"],
+input[type="url"],
+textarea {
+    font-family: "DM Sans", sans-serif !important;
+}
+/* Specifiy Font Family End */
+.center-div {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+.data_field_new,
+.data_field,
+.date_field_address,
+.date_field_work {
+    display: inline-block;
+    margin-left: 15px;
+}
+.data_field_new #email {
+    width: 285px;
+}
+.data_field_work #workEmail {
+    width: 300px;
+}
+.data_field input {
+    width: 150px !important;
+}
+.date_field_address input {
+    width: 250px;
+}
+.date_field_work input {
+    width: 250px;
+}
+.data_field #btnCopy,
+.date_field_address #btnCopy,
+.date_field_work #btnCopy {
+    margin-left: 6px;
+}
+.data_field_new #btnCopy {
+    margin-left: 3px;
+}
+.margin-left-zero {
+    margin-left: 0px !important;
+}
+
+.header_main {
+    margin-top: 40px;
+}
+
+.header .title {
+    text-align: center;
+    margin-bottom: 5px;
+}
+.header p {
+    text-align: center;
+}
+label,
+legend {
+    color: #222;
+}
+#btnCopy:hover,
+#btnCopy:focus {
+    background: #41af64;
+    color: #fff;
+    transition: ease-out 0.3s;
+    border-color: #41af64;
+}
+
+.button_wrapper {
+    margin: 30px auto;
+    text-align: center;
+}
+
+.button_wrapper button {
+    font-family: "DM Sans", sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    background: #4e60bf;
+    border: none !important;
+    color: #fff !important;
+    box-shadow: 0 2px 5px rgb(72 72 72 / 19%), 0 3px 6px rgb(119 119 119 / 8%),
+    0 1px 9px rgb(156 156 156 / 8%);
+    height: inherit;
+    min-width: 200px;
+    padding: 8px 20px;
+    text-align: center;
+}
+.button_wrapper button:hover,
+button_wrapper button:focus {
+    color: #fff !important;
+    background: #293da9;
+    transition: ease-out 0.3s;
+}
+
+.box_card {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 30px;
+    box-shadow: 0 7px 7px rgb(162 162 162 / 9%), 0 3px 6px rgb(119 119 119 / 8%),
+    0 1px 9px rgb(156 156 156 / 8%);
+    background: #fff;
+}
+.value-props {
+    text-align: center;
+}
+.value-props img {
+    width: 110px;
+    display: block;
+    text-align: center;
+    margin: 20px auto;
+}
+label {
+    font-weight: 400;
+}
+.footer {
+    background: #222436;
+    color: #c8d3f5;
+    text-align: center;
+    padding: 20px;
+    margin-top: 25px;
+}
+.footer p {
+    margin-bottom: 15px;
+}
+.footer a {
+    color: #c8d3f5;
+    text-decoration: none;
+}
+.footer a:hover {
+    color: #fafafa;
+}
+.section_title h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+.button_m_blue {
+    font-family: "DM Sans", sans-serif;
+    
+    font-size: 15px;
+    margin-top: 1rem;
+    background: #4e60bf;
+    border: none !important;
+    text-decoration: none;
+    border-radius: 5px;
+    color: #fff !important;
+    box-shadow: 0 2px 5px rgb(72 72 72 / 19%), 0 3px 6px rgb(119 119 119 / 8%),
+    0 1px 9px rgb(156 156 156 / 8%);
+    min-width: 200px;
+    padding: 12px 10px;
+    text-align: center;
+    display: inline-block;
+}
+.button_m_blue:hover {
+    background: #3146b3;
+    transition: ease-out 0.3s;
+}
+
+/* Responsive CSS Starts */
+/* Mobile CSS Here*/
+/* Larger than mobile */
+@media (max-width: 480px) {
+    .value-props img {
+        width: 60px;
+    }
+    .date_field_address input,
+    .date_field_work input {
+        width: 185px;
+    }
+    .header .title {
+        margin-top: 30px;
+    }
+    .data_field_new #email {
+        width: 180px;
+    }
+}
+
+/* Larger than phone */
+@media (min-width: 550px) {
+    .header {
+        margin-top: 5rem;
+    }
+    .value-props {
+        margin-top: 4rem;
+        margin-bottom: 2rem;
+    }
+} /* Main tag ends here */
+
+/* Responsive CSS Ends */
