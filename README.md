@@ -1,2 +1,2 @@
-# tools
-Tools to reduce your day to day life manual work
+# Tools Directory
+Tools to reduce the daily manual work
