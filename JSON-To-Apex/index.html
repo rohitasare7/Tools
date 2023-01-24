@@ -16,26 +16,36 @@
         #resetBtn {
             margin: 0 30px;
         }
-
+        
         body {
             font-family: "DM Sans", sans-serif !important;
         }
-
+        
         textarea,
         input {
             font-family: Consolas !important;
         }
-
+        
         .header {
             margin-top: 5rem;
             text-align: center;
         }
-
-        input#inpClassName {
+        
+        input#inpClassName, #testClassName {
             width: 40%;
             min-width: 300px;
             max-width: 500px;
         }
+        
+        .buttonTopRight{
+            position: absolute;
+            top: 10px;
+            right: 25px;
+        }
+        .container-input{
+            position: relative;
+        }
+        
     </style>
 </head>
 
@@ -45,30 +55,73 @@
         <div class='title'>
             <section class="header">
                 <h1>JSON To Apex</h1>
+                <p>Convert your JSON into Apex Code</p>
             </section>
         </div>
-        <div class='center'>
-            <h5>Change Your Wrapper Class</h5>
-            <input type="text" id="inpClassName" value="WrapperClass" placeholder="Enter Wrapper Class Name" required>
+        <hr>
+        <div class='center container'>
+            
+            <div class="row">
+                <div class="seven columns"> <h5>Enter Wrapper Class Name</h5>
+                    <input type="text" id="inpClassName"  value="MainClass" placeholder="Enter Wrapper Class Name" onkeyup="document.getElementById('testClassName').value=this.value+'Test'">
+                </div>
+                <div class="five columns">
+                    <label class="inputCheckBox">
+                        <h5 class="label-body">Change Test Class Name</h5>
+                        <input type="text" id="testClassName"  value="MainClassTest" placeholder="Enter Test Class Name">
+                    </label>
+                </div>
+            </div>
+            
             <h5>Paste Your JSON Here</h5>
+            <div class="container-input">
             <textarea class="u-full-width" placeholder="Paste JSON Here" id="j" name="w3review"
-                style="height: 150px; width: 100%;"></textarea><br />
+            style="height: 150px; width: 100%;"></textarea><br />
             <input onclick="javascript:go();" id="submit" type="submit" value="Submit"></input>
+            <button id="resetBtn"  onclick="resetFieldValue();">Reset</button>
+        </div>
             <!-- <button onclick="getData()" id="submit" >Submit</button><br/><br/> -->
             <br />
-            <!-- Output Apex Code -->
-            <h5>Copy Your Wrapper Class Apex Code</h5>
-            <textarea id="t" placeholder="Paste and Submit Your JSON to Copy" class="u-full-width"
+            <!-- Main Class -->
+            <div class="row">
+                
+                <h5>Copy Your Main Wrapper Class</h5>
+                <div class="container-input">
+                <textarea id="t" placeholder="Paste and Submit Your JSON to Copy" class="u-full-width"
                 style="height: 150px; width: 100%;"></textarea>
-            <button id="btnCopy" data-clipboard-target="#output">Copy</button>
-            <button id="resetBtn" onclick="resetFieldValue();">Reset</button>
+                <button id="btnCopy" class="buttonTopRight" data-clipboard-target="#t">Copy</button>
+            </div>
+            </div>
+            <!-- Test Class -->
+            <div class="row">
+                <h5>Copy Test Class Method</h5>
+                <div class="container-input">
+                <textarea id="testClass" placeholder="Paste and Submit Your JSON to Copy" class="u-full-width"
+                style="height: 150px; width: 100%;"></textarea>
+                <button id="btnCopy" class="buttonTopRight" data-clipboard-target="#testClass">Copy</button>
+            </div>
+                
+            </div>
+            
         </div>
     </div>
     <script>
+
+        function changeTestClassName(s){
+        //document.getElementById("testClassName").value = s+'_Test';
+        const mainClass = document.getElementById('inpClassName');
+        const testClass = document.getElementById('testClassName');
+        mainClass.addEventListener('change', (e)=>{testClass.value = e.target.value+'Test';});
+        }
+
         function l(s) {
             document.getElementById("t").value += s;
         }
-
+        
+        function l2(s) {
+            document.getElementById("testClass").value += s;
+        }
+        
         function jla(a, b) {
             if (b == '') {
                 l("	" + a + "\n");
@@ -77,45 +130,45 @@
                 c[b].push(a);
             }
         }
-
+        
         function r(o, s) {
             if (o) {
                 for (var key in o) {
                     switch (typeof o[key]) {
                         case "object":
-                            c[key] = [];
-                            if (Object.prototype.toString.call(o[key]) === '[object Array]') {
-                                jla("public cls_" + key + "[] " + key + ";", s);
-                                r(o[key][0], key);
-                            } else {
-                                jla("public cls_" + key + " " + key + ";", s);
-                                r(o[key], key);
-                            }
-                            break;
+                        c[key] = [];
+                        if (Object.prototype.toString.call(o[key]) === '[object Array]') {
+                            jla("public cls_" + key + "[] " + key + ";", s);
+                            r(o[key][0], key);
+                        } else {
+                            jla("public cls_" + key + " " + key + ";", s);
+                            r(o[key], key);
+                        }
+                        break;
                         case "function":
-                            break;
+                        break;
                         case "boolean":
-                            jla("public boolean " + key + ";", s);
-                            break;
+                        jla("public boolean " + key + ";", s);
+                        break;
                         case "number":
-                            if (parseInt(o[key]) == o[key]) {
-                                jla("public Integer " + key + ";	//" + o[key], s);
-                            } else jla("public Double " + key + ";	//" + o[key], s);
-                            break;
+                        if (parseInt(o[key]) == o[key]) {
+                            jla("public Integer " + key + ";	//" + o[key], s);
+                        } else jla("public Double " + key + ";	//" + o[key], s);
+                        break;
                         case "string":
-                            jla("public String " + key + ";	//" + o[key], s);
-
-                            break;
+                        jla("public String " + key + ";	//" + o[key], s);
+                        
+                        break;
                         default:
-                            console.log(s + key + '=' + o[key] + '(' + (typeof o[key]) + ')');
-                            break;
+                        console.log(s + key + '=' + o[key] + '(' + (typeof o[key]) + ')');
+                        break;
                     } //switch
                 } //for
             } //if
             return;
         }
         function go() {
-
+            
             var JSON = JSON || {};
             JSON.parse = JSON.parse || function (s) {
                 if (s === "") s = '""';
@@ -124,13 +177,18 @@
             };
             var obj = JSON.parse(document.getElementById("j").value);
             var theClassName = document.getElementById("inpClassName").value;
+            var testClassName = document.getElementById("testClassName").value;
             //if Class Name input is null
             if (theClassName == '') {
                 console.log('Inside if Condition');
-                theClassName ='TestWrapperClass'
+                theClassName ='MainWrapperClass'
                 document.getElementById("inpClassName").value = theClassName;
             }
+            if(testClassName == '' && theClassName != ''){
+                testClassName = theClassName;
+            }
             document.getElementById("t").value = "/*\nClass Info Here\n*/\n\npublic class " + theClassName + "{\n";
+            //var renderTestClass = document.querySelector('#testClassCheck').checked;
             c = [];
             r(obj, '');
             for (var key in c) {
@@ -138,14 +196,23 @@
                 for (var i = 0, len = c[key].length; i < len; i++) l("		" + c[key][i] + "\n");
                 l("	}\n");
             }
-            l("	public static " + theClassName + " parse(String json){\n		return (" + theClassName + ") System.JSON.deserialize(json, " + theClassName + ".class);\n	}\n\n	static testMethod void testParse() {\n		String json=");
+            
+            l("	\n //Call This Method to Deserialize \npublic static " + theClassName + " parse(String json){\n		return (" + theClassName + ") System.JSON.deserialize(json, " + theClassName + ".class);\n	}\n }\n\n");
+            /* commented test class
+            l(" \n @isTest \n public static void testMethod(){\n		String json=");
             var a = document.getElementById("j").value.split("\r\n").join("\n").split("\n");
             for (var i = 0, len = a.length; i < len; i++) a[i] = "		'" + a[i] + "'";
-            l(a.join("+\n") + ";\n		" + theClassName + " obj = " + theClassName + ".parse(json);\n		System.assert(obj != null);\n	}\n}");
+            l(a.join("+\n") + ";\n		" + theClassName + " obj = " + theClassName + ".parse(json);\n		System.assert(obj != null);\n	}\n");
+            */
+            document.getElementById("testClass").value = "/*\nTest Class for "+ theClassName +"\nAdditional Info Here\n*/\n\n @isTest \npublic class " + testClassName + "{\n";
+            l2(" \n @isTest \n public static void wrapperTestMethod(){\n		String json=");
+            var a = document.getElementById("j").value.split("\r\n").join("\n").split("\n");
+            for (var i = 0, len = a.length; i < len; i++) a[i] = "		'" + a[i] + "'";
+            l2(a.join("+\n") + ";\n		" + theClassName + " obj = " + theClassName + ".parse(json);\n		System.assert(obj != null);\n	}\n \n}");
         }
         //go();
     </script>
-
+    
     <script>
         //ClipboardJS Intialization
         let copyFunction = new ClipboardJS('#btnCopy');
@@ -154,10 +221,12 @@
             document.getElementById("inpClassName").value = "";
             document.getElementById("j").value = "";
             document.getElementById("t").value = "";
+            document.getElementById("testClass").value = ""; 
+            document.getElementById("testClassName").value = "";
         }
-
+        
     </script>
-
+    
 </body>
 
 </html>
