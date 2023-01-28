@@ -16,36 +16,126 @@
         #resetBtn {
             margin: 0 30px;
         }
-        
+
         body {
             font-family: "DM Sans", sans-serif !important;
+            background: #f8fafc;
         }
-        
+
         textarea,
         input {
             font-family: Consolas !important;
         }
-        
+
         .header {
             margin-top: 5rem;
             text-align: center;
         }
-        
-        input#inpClassName, #testClassName {
+
+        input#inpClassName,
+        #testClassName {
             width: 40%;
             min-width: 300px;
             max-width: 500px;
+            box-shadow: 0 20px 25px -5px rgb(15 23 42 / 10%), 0 8px 10px -6px rgb(15 23 42 / 10%);
+            border: 1px solid #e3e3e3;
+            border-radius: 7px;
         }
-        
-        .buttonTopRight{
+
+        input#inpClassName:focus,
+        #testClassName:focus {
+            border: 1px solid #ddd;
+            box-shadow: 0 20px 25px -5px #a1a1a18c, 0 8px 10px -6px #a3a3a3;
+            transition: ease-in 0.2s;
+        }
+
+        .buttonTopRight {
             position: absolute;
             top: 10px;
             right: 25px;
         }
-        .container-input{
+
+        .container-input {
             position: relative;
         }
-        
+
+        #submit {
+            background: #0d6efd;
+        }
+
+        .btn-copy {
+            background: #6ab04c;
+        }
+
+        .btn-reset {
+            background: #343434;
+        }
+
+        #submit,
+        .btn-copy,
+        .btn-reset {
+            box-shadow: 0 3px 4px 0 rgb(0 0 0 / 14%), 0 3px 3px -2px rgb(0 0 0 / 20%), 0 1px 8px 0 rgb(0 0 0 / 12%);
+            color: #fff;
+            border: none;
+            font-size: 13px;
+            font-family: "DM Sans", sans-serif !important;
+            font-weight: normal;
+        }
+
+        #submit:hover,
+        .button-normal:hover,
+        .btn-reset:hover,
+        .btn-copy:hover {
+            color: #fff;
+        }
+
+        textarea {
+            border: 1px solid #e3e3e3;
+            box-shadow: 0 20px 25px -5px rgb(15 23 42 / 10%), 0 8px 10px -6px rgb(15 23 42 / 10%);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+
+
+        ::-webkit-scrollbar-track {
+            background: rgb(186, 186, 186);
+            border-top-right-radius: 5px;
+            border-bottom-right-radius: 5px;
+        }
+
+
+        ::-webkit-scrollbar-thumb {
+            background-color: #6e6e6e;
+            background-image: linear-gradient(160deg, #8f8f8f 0%);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {}
+
+        .help-text {
+            position: relative;
+            display: inline-block;
+        }
+
+        .help-text::before {
+            content: '';
+            position: absolute;
+            background-color: #6634ff8c;
+            width: 100%;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            right: 0;
+        }
+
+        textarea:focus {
+            border: 1px solid #ddd;
+            box-shadow: 0 20px 25px -5px #a1a1a18c, 0 8px 10px -6px #a3a3a3;
+            transition: ease-in 0.2s;
+        }
     </style>
 </head>
 
@@ -60,68 +150,71 @@
         </div>
         <hr>
         <div class='center container'>
-            
+
             <div class="row">
-                <div class="seven columns"> <h5>Enter Wrapper Class Name</h5>
-                    <input type="text" id="inpClassName"  value="MainClass" placeholder="Enter Wrapper Class Name" onkeyup="document.getElementById('testClassName').value=this.value+'Test'">
+                <div class="seven columns">
+                    <h5>Enter Wrapper Class Name</h5>
+                    <input type="text" id="inpClassName" value="MainClass" placeholder="Enter Wrapper Class Name"
+                        onkeyup="document.getElementById('testClassName').value=this.value+'Test'">
                 </div>
                 <div class="five columns">
                     <label class="inputCheckBox">
                         <h5 class="label-body">Change Test Class Name</h5>
-                        <input type="text" id="testClassName"  value="MainClassTest" placeholder="Enter Test Class Name">
+                        <input type="text" id="testClassName" value="MainClassTest" placeholder="Enter Test Class Name">
                     </label>
                 </div>
             </div>
-            
-            <h5>Paste Your JSON Here</h5>
+
+            <h5 class="help-text">Paste Your JSON Here</h5>
             <div class="container-input">
-            <textarea class="u-full-width" placeholder="Paste JSON Here" id="j" name="w3review"
-            style="height: 150px; width: 100%;"></textarea><br />
-            <input onclick="javascript:go();" id="submit" type="submit" value="Submit"></input>
-            <button id="resetBtn"  onclick="resetFieldValue();">Reset</button>
-        </div>
+                <textarea class="u-full-width" placeholder="Paste JSON Here" id="j" name="w3review"
+                    style="height: 150px; width: 100%;"></textarea><br />
+                <input onclick="javascript:go();" id="submit" type="submit" value="Submit"></input>
+                <button id="resetBtn" class="btn-reset" onclick="resetFieldValue();">Reset</button>
+            </div>
             <!-- <button onclick="getData()" id="submit" >Submit</button><br/><br/> -->
             <br />
             <!-- Main Class -->
             <div class="row">
-                
-                <h5>Copy Your Main Wrapper Class</h5>
+
+                <h5 class="help-text">Copy Your Main Wrapper Class</h5>
                 <div class="container-input">
-                <textarea id="t" placeholder="Paste and Submit Your JSON to Copy" class="u-full-width"
-                style="height: 150px; width: 100%;"></textarea>
-                <button id="btnCopy" class="buttonTopRight" data-clipboard-target="#t">Copy</button>
-            </div>
+                    <textarea id="t" placeholder="Paste and Submit Your JSON to Copy" class="u-full-width"
+                        style="height: 150px; width: 100%;"></textarea>
+                    <button id="btnCopy" class="buttonTopRight btn-copy" data-clipboard-target="#t">Copy</button>
+                </div>
             </div>
             <!-- Test Class -->
             <div class="row">
-                <h5>Copy Test Class Method</h5>
+                <h5 class="help-text">Copy Test Class Method</h5>
                 <div class="container-input">
-                <textarea id="testClass" placeholder="Paste and Submit Your JSON to Copy" class="u-full-width"
-                style="height: 150px; width: 100%;"></textarea>
-                <button id="btnCopy" class="buttonTopRight" data-clipboard-target="#testClass">Copy</button>
+                    <textarea id="testClass" placeholder="Paste and Submit Your JSON to Copy" class="u-full-width"
+                        style="height: 150px; width: 100%;"></textarea>
+                    <button id="btnCopy" class="buttonTopRight btn-copy"
+                        data-clipboard-target="#testClass">Copy</button>
+                </div>
+
             </div>
-                
-            </div>
-            
+
         </div>
     </div>
     <script>
 
-        function changeTestClassName(s){
-        //document.getElementById("testClassName").value = s+'_Test';
-        const mainClass = document.getElementById('inpClassName');
-        const testClass = document.getElementById('testClassName');
-        mainClass.addEventListener('change', (e)=>{testClass.value = e.target.value+'Test';});
+        function changeTestClassName(s) {
+            //document.getElementById("testClassName").value = s+'_Test';
+            const mainClass = document.getElementById('inpClassName');
+            const testClass = document.getElementById('testClassName');
+            mainClass.addEventListener('change', (e) => { testClass.value = e.target.value + 'Test'; });
         }
 
         function l(s) {
             document.getElementById("t").value += s;
         }
-        
+
         function l2(s) {
             document.getElementById("testClass").value += s;
         }
-        
+
         function jla(a, b) {
             if (b == '') {
                 l("	" + a + "\n");
@@ -130,45 +223,45 @@
                 c[b].push(a);
             }
         }
-        
+
         function r(o, s) {
             if (o) {
                 for (var key in o) {
                     switch (typeof o[key]) {
                         case "object":
-                        c[key] = [];
-                        if (Object.prototype.toString.call(o[key]) === '[object Array]') {
-                            jla("public cls_" + key + "[] " + key + ";", s);
-                            r(o[key][0], key);
-                        } else {
-                            jla("public cls_" + key + " " + key + ";", s);
-                            r(o[key], key);
-                        }
-                        break;
+                            c[key] = [];
+                            if (Object.prototype.toString.call(o[key]) === '[object Array]') {
+                                jla("public cls_" + key + "[] " + key + ";", s);
+                                r(o[key][0], key);
+                            } else {
+                                jla("public cls_" + key + " " + key + ";", s);
+                                r(o[key], key);
+                            }
+                            break;
                         case "function":
-                        break;
+                            break;
                         case "boolean":
-                        jla("public boolean " + key + ";", s);
-                        break;
+                            jla("public boolean " + key + ";", s);
+                            break;
                         case "number":
-                        if (parseInt(o[key]) == o[key]) {
-                            jla("public Integer " + key + ";	//" + o[key], s);
-                        } else jla("public Double " + key + ";	//" + o[key], s);
-                        break;
+                            if (parseInt(o[key]) == o[key]) {
+                                jla("public Integer " + key + ";	//" + o[key], s);
+                            } else jla("public Double " + key + ";	//" + o[key], s);
+                            break;
                         case "string":
-                        jla("public String " + key + ";	//" + o[key], s);
-                        
-                        break;
+                            jla("public String " + key + ";	//" + o[key], s);
+
+                            break;
                         default:
-                        console.log(s + key + '=' + o[key] + '(' + (typeof o[key]) + ')');
-                        break;
+                            console.log(s + key + '=' + o[key] + '(' + (typeof o[key]) + ')');
+                            break;
                     } //switch
                 } //for
             } //if
             return;
         }
         function go() {
-            
+
             var JSON = JSON || {};
             JSON.parse = JSON.parse || function (s) {
                 if (s === "") s = '""';
@@ -181,10 +274,10 @@
             //if Class Name input is null
             if (theClassName == '') {
                 console.log('Inside if Condition');
-                theClassName ='MainWrapperClass'
+                theClassName = 'MainWrapperClass'
                 document.getElementById("inpClassName").value = theClassName;
             }
-            if(testClassName == '' && theClassName != ''){
+            if (testClassName == '' && theClassName != '') {
                 testClassName = theClassName;
             }
             document.getElementById("t").value = "/*\nClass Info Here\n*/\n\npublic class " + theClassName + "{\n";
@@ -196,7 +289,7 @@
                 for (var i = 0, len = c[key].length; i < len; i++) l("		" + c[key][i] + "\n");
                 l("	}\n");
             }
-            
+
             l("	\n //Call This Method to Deserialize \npublic static " + theClassName + " parse(String json){\n		return (" + theClassName + ") System.JSON.deserialize(json, " + theClassName + ".class);\n	}\n }\n\n");
             /* commented test class
             l(" \n @isTest \n public static void testMethod(){\n		String json=");
@@ -204,7 +297,7 @@
             for (var i = 0, len = a.length; i < len; i++) a[i] = "		'" + a[i] + "'";
             l(a.join("+\n") + ";\n		" + theClassName + " obj = " + theClassName + ".parse(json);\n		System.assert(obj != null);\n	}\n");
             */
-            document.getElementById("testClass").value = "/*\nTest Class for "+ theClassName +"\nAdditional Info Here\n*/\n\n @isTest \npublic class " + testClassName + "{\n";
+            document.getElementById("testClass").value = "/*\nTest Class for " + theClassName + "\nAdditional Info Here\n*/\n\n @isTest \npublic class " + testClassName + "{\n";
             l2(" \n @isTest \n public static void wrapperTestMethod(){\n		String json=");
             var a = document.getElementById("j").value.split("\r\n").join("\n").split("\n");
             for (var i = 0, len = a.length; i < len; i++) a[i] = "		'" + a[i] + "'";
@@ -212,7 +305,7 @@
         }
         //go();
     </script>
-    
+
     <script>
         //ClipboardJS Intialization
         let copyFunction = new ClipboardJS('#btnCopy');
@@ -221,12 +314,12 @@
             document.getElementById("inpClassName").value = "";
             document.getElementById("j").value = "";
             document.getElementById("t").value = "";
-            document.getElementById("testClass").value = ""; 
+            document.getElementById("testClass").value = "";
             document.getElementById("testClassName").value = "";
         }
-        
+
     </script>
-    
+
 </body>
 
 </html>
