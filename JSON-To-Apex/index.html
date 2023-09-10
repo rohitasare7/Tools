@@ -302,7 +302,7 @@
             c = [];
             r(obj, '');
             for (var key in c) {
-                l("	class cls_" + key + " {\n");
+                l("	public class cls_" + key + " {\n");
                 for (var i = 0, len = c[key].length; i < len; i++) l("		" + c[key][i] + "\n");
                 l("	}\n");
             }
