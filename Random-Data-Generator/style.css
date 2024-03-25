@@ -206,3 +206,10 @@ label {
 } /* Main tag ends here */
 
 /* Responsive CSS Ends */
+
+pre {
+    background: #14232e;
+    color: #fff;
+    border-radius: 8px;
+    padding: 30px;
+}

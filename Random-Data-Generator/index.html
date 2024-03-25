@@ -21,8 +21,9 @@
     <div class="container"> <!-- header start-->
         <section class="header">
             <h2 class="title">Random Data Generator</h2>
-            <p>Unlimited data for your testing scenarios. Hit Generate for new data. <br> Local is set to India so data will be relevant to India.</p>
-            
+            <p>Unlimited data for your testing scenarios. Hit Generate for new data. <br> Local is set to India so data
+                will be relevant to India.</p>
+
         </section>
     </div> <!-- header end-->
 
@@ -159,6 +160,10 @@
                 </div>
             </div>
         </div> <!-- box_card end -->
+
+
+        <pre id="userInfo"></pre>
+
         <div class="center-div">
             <a href="#topSection" class="button_m_blue">Back to Top</a>
         </div>
@@ -262,7 +267,25 @@
             document.querySelector('#aadhar').value = aadharRegex;
             document.querySelector('#drlicence').value = finalLicense;
 
+            var jsonObj = {
+                personalInfo: {
+                    firstName: firstName,
+                    lastName: lastName
+                },
+                address: {
+                    apartment: houseNumber,
+                    street: streetName,
+                    landmark: landmark
+                },
+                idProof: {
+                    panCard: panRegex,
+                    voterId: voterRegex,
+                    passport: passportRegex,
+                    drivingLicense: finalLicense
+                }
+            }
 
+            displayData(jsonObj);
         }
 
         // Main Logic Ends Here
@@ -276,6 +299,12 @@
             duration: 800,
         });
 
+        // Display data on UI
+        function displayData(value) {
+            var userInfoDiv = document.getElementById('userInfo');
+            var userInfoString = JSON.stringify(value, null, 2);
+            userInfoDiv.textContent = userInfoString;
+        }
 
     </script>
 
