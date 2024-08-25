@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Package.xml Validator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!--Google Font-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+</head>
+<style>
+    .body {
+        font-family: "Work Sans", sans-serif;
+        font-weight: 400;
+    }
+
+    .h2 {
+        font-weight: 600;
+    }
+</style>
+
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="bg-white p-6 rounded-lg shadow-md w-4/5 my-10">
+        <h1 class="text-2xl font-bold mb-4 uppercase text-gray-800">Package.xml Validator</h1>
+        <textarea id="xmlInput" class="w-full h-48 p-2 border border-gray-300 rounded mb-4"
+            placeholder="Paste your package.xml code here..."></textarea>
+        <button id="validateBtn" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">Validate &
+            Clean</button>
+
+        <h2 class="text-xl font-bold mt-4 mb-2 uppercase text-gray-800">Cleaned Package.xml</h2>
+        <textarea id="xmlOutput" class="w-full h-48 p-2 border border-gray-300 rounded mb-4" readonly></textarea>
+        <button id="copyBtn" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700">Copy to
+            Clipboard</button>
+
+        <h2 class="text-xl font-bold mt-6 mb-2 uppercase text-gray-800">Removed Items</h2>
+        <input id="searchInput" type="text" placeholder="Search..."
+            class="w-full p-2 border border-gray-300 rounded mb-4">
+
+        <table class="w-full border-collapse border border-gray-300">
+            <thead>
+                <tr>
+                    <th class="border border-gray-300 p-2">#</th>
+                    <th class="border border-gray-300 p-2">Element/Item Name</th>
+                    <th class="border border-gray-300 p-2">Reason for Removal</th>
+                </tr>
+            </thead>
+            <tbody id="removedItemsTable">
+                <!-- Removed items will be appended here -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        //Tailwind Config
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ["Work Sans", 'sans-serif'],
+                    },
+                }
+            }
+        }
+
+        //Actual logic starts here
+        document.getElementById('validateBtn').addEventListener('click', function () {
+            const xmlInput = document.getElementById('xmlInput').value;
+            const { cleanedXml, removedItems } = cleanPackageXml(xmlInput);
+            document.getElementById('xmlOutput').value = cleanedXml;
+            populateRemovedItemsTable(removedItems);
+        });
+
+        document.getElementById('copyBtn').addEventListener('click', function () {
+            const xmlOutput = document.getElementById('xmlOutput');
+            xmlOutput.select();
+            document.execCommand('copy');
+        });
+
+        document.getElementById('searchInput').addEventListener('input', function () {
+            const searchValue = this.value.toLowerCase();
+            const rows = document.querySelectorAll('#removedItemsTable tr');
+            rows.forEach(row => {
+                const item = row.children[1].textContent.toLowerCase();
+                row.style.display = item.includes(searchValue) ? '' : 'none';
+            });
+        });
+
+        function cleanPackageXml(xml) {
+            const removedItems = [];
+            let cleanedXml = xml;
+
+            // Remove commented lines
+            cleanedXml = cleanedXml.replace(/<!--[\s\S]*?-->/g, (match) => {
+                removedItems.push({ item: escapeHtml(match.trim()), reason: 'Commented Out' });
+            return '';
+        });
+
+        // Process each <types> block
+        cleanedXml = cleanedXml.replace(/<types>[\s\S]*?<\/types>/g, function (typesBlock) {
+            const nameMatch = typesBlock.match(/<name>(.*?)<\/name>/);
+            if (nameMatch) {
+                const name = nameMatch[1];
+                const membersMap = new Map();
+                const membersPattern = /<members>(.*?)<\/members>/g;
+                let match;
+
+                while ((match = membersPattern.exec(typesBlock)) !== null) {
+                    const member = match[1];
+                    const versionMatch = member.match(/_(\d+)$/);
+                    const key = versionMatch ? member.replace(/_\d+$/, '') : member;
+                    const version = versionMatch ? parseInt(versionMatch[1], 10) : 0;
+
+                    if (!membersMap.has(key) || membersMap.get(key) < version) {
+                        if (membersMap.has(key)) {
+                            removedItems.push({
+                                item: `<members>${key}_${membersMap.get(key)}</members> (${name})`,
+                                reason: 'Older Version'
+                            });
+                        }
+                        membersMap.set(key, version);
+                    } else if (membersMap.get(key) === version) {
+                        removedItems.push({
+                            item: `<members>${member}</members> (${name})`,
+                            reason: 'Duplicate'
+                        });
+                    }
+                }
+
+                // Rebuild the <types> block with unique and latest version members
+                const newMembers = Array.from(membersMap).map(([key, version]) =>
+                    version ? `<members>${key}_${version}</members>` : `<members>${key}</members>`
+                ).join('\n        ');
+
+                // Replace the old <members> with the new filtered list
+                typesBlock = typesBlock.replace(/<members>[\s\S]*?<\/members>/g, '');
+                typesBlock = typesBlock.replace(/<\/name>/, `</name>\n        ${newMembers}`);
+            }
+            return typesBlock;
+        });
+
+        // Clean up any extra blank lines
+        cleanedXml = cleanedXml.replace(/^\s*[\r\n]/gm, '');
+
+        return { cleanedXml: cleanedXml.trim(), removedItems };
+        }
+
+        function escapeHtml(text) {
+            return text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        function populateRemovedItemsTable(removedItems) {
+            const tableBody = document.getElementById('removedItemsTable');
+            tableBody.innerHTML = ''; // Clear previous items
+
+            removedItems.forEach((item, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="border border-gray-300 p-2 text-center">${index + 1}</td>
+                    <td class="border border-gray-300 p-2">${item.item}</td>
+                    <td class="border border-gray-300 p-2 text-center">${item.reason}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+    </script>
+</body>
+
+</html>

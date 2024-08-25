@@ -248,7 +248,7 @@
                         case "object":
                             c[key] = [];
                             if (Object.prototype.toString.call(o[key]) === '[object Array]') {
-                                jla("public cls_" + key + "[] " + key + ";", s);
+                                jla("public List<cls_" + key + "> " + key + ";", s);
                                 r(o[key][0], key);
                             } else {
                                 jla("public cls_" + key + " " + key + ";", s);
